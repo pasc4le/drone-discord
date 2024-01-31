@@ -1,4 +1,13 @@
-FROM alpine:3.17
+FROM golang AS builder
+
+WORKDIR /build
+
+COPY . .
+
+RUN go build -o out 
+RUN mv out drone-discord
+
+FROM alpine:3.17 AS runner
 
 ARG TARGETOS
 ARG TARGETARCH
@@ -15,6 +24,6 @@ LABEL org.opencontainers.image.licenses=MIT
 RUN apk add --no-cache ca-certificates=20230506-r0 && \
   rm -rf /var/cache/apk/*
 
-COPY release/${TARGETOS}/${TARGETARCH}/drone-discord /bin/
+COPY --from=builder /build/drone-discord /bin/
 
 ENTRYPOINT ["/bin/drone-discord"]
