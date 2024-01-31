@@ -50,6 +50,8 @@ type (
 		Avatar  string
 		Email   string
 		Message string
+		Brief   string
+		Details string
 	}
 
 	Source struct {

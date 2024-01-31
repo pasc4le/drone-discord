@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -234,6 +235,8 @@ func main() {
 }
 
 func run(c *cli.Context) error {
+	brief, details, _ := strings.Cut(c.String("commit.message"), "\n")
+
 	plugin := Plugin{
 		GitHub: GitHub{
 			Workflow:  c.String("github.workflow"),
@@ -256,6 +259,8 @@ func run(c *cli.Context) error {
 			Email:   c.String("commit.author.email"),
 			Avatar:  c.String("commit.author.avatar"),
 			Message: c.String("commit.message"),
+			Brief:   brief,
+			Details: details,
 		},
 		Source: Source{
 			Branch: c.String("source.branch"),
